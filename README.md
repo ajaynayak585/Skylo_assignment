@@ -24,6 +24,8 @@ Staging Layer
    |
 Curated Layer
    |
+Analytics Marts
+   |
 Data Quality Checks
 
 Data Modeling on BQ:
@@ -136,6 +138,26 @@ Curated layer contains clean business entities.
         ) = 1;
 
 
+Analytics Mart Layer:
+--------------------------
+
+Create business-ready tables.
+    mart_partner_monthly_usage
+
+
+CREATE OR REPLACE TABLE mart.mart_partner_monthly_usage AS
+    SELECT
+        s.partner_mno,
+        FORMAT_TIMESTAMP('%Y-%m', u.event_ts) AS usage_month,
+        COUNT(*) AS total_events,
+        COUNT(DISTINCT u.subscriber_id) AS active_subscribers,
+        SUM(u.bytes_up) AS total_bytes_up_down
+    FROM curated.fact_usage_event u
+    JOIN curated.dim_subscriber s
+    ON u.subscriber_id = s.subscriber_id
+    GROUP BY
+        s.partner_mno,
+        usage_month;
 
 Data Quality Checks:
 ---------------------------
