@@ -1,4 +1,4 @@
-Business questions to answer:
+Business queries:
 -----------------------------------
 
 1. Monthly active subscribers per MNO partner and per region
