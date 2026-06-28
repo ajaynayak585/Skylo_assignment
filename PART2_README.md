@@ -77,13 +77,12 @@ Data Governance we can check authentication,data validation,data quality & data 
 
 Security and Privacy for Subscriber and Billing Data:
 -----------------------------------------------------------
-IAM and access control using IAM service , integrate gcp services using service account and provide access at specific user for different use cases.
-   Project-level IAM
-   Dataset-level IAM
-   Table-level IAM
-   Authorized views
-   Secret Manager
-  
+IAM and access control using IAM service , integrate gcp services using service account and provide access at specific user based on different cases.
+   1.Project-level IAM
+   2.Dataset-level IAM
+   3.Table-level IAM
+   4.Authorized views
+   5.Secret Manager
 
 For PII date , we must use data masking & Use authorized views for restricted access
 
@@ -95,12 +94,12 @@ cluster based on frequent filter and join columns
 
 Query cost control can be control using below points:
 
-  Avoid SELECT *
-  Use partition filters
-  Use materialized views for repeated aggregations
-  Use approximate functions for large exploratory queries
-  Monitor expensive queries using INFORMATION_SCHEMA
-  Use Explain option to check the bigquery different stages
+     1.Avoid SELECT *
+     2.Use partition filters
+     3.Use materialized views for repeated aggregations
+     4.Use approximate functions for large exploratory queries
+     5.Monitor expensive queries using INFORMATION_SCHEMA
+     6.Use Explain option to check the bigquery different stages
 
 CI/CD for data, infrastructure-as-code, and testing:
 ---------------------------------------------------------
@@ -115,4 +114,5 @@ Breaking change:
 - Column renamed
 - Data type changed
 - Mandatory column removed
+  
 Baackfilling can be possible in airflow dag using catchup parameter as True.
