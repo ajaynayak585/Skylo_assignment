@@ -78,12 +78,12 @@ Data Governance we can check authentication,data validation,data quality & data 
 Security and Privacy for Subscriber and Billing Data:
 -----------------------------------------------------------
 IAM and access control using IAM service , integrate gcp services using service account and provide access at specific user for different use cases.
-Project-level IAM
-Dataset-level IAM
-Table-level IAM
-Authorized views
-Secret Manager
-Service accounts per pipeline
+   Project-level IAM
+   Dataset-level IAM
+   Table-level IAM
+   Authorized views
+   Secret Manager
+  
 
 For PII date , we must use data masking & Use authorized views for restricted access
 
