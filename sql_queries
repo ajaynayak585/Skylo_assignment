@@ -1,0 +1,74 @@
+Business questions to answer:
+-----------------------------------
+
+1. Monthly active subscribers per MNO partner and per region
+      SELECT
+          s.partner_mno,
+          s.region,
+          FORMAT_TIMESTAMP('%Y-%m', u.event_ts) AS usage_month,
+          COUNT(DISTINCT u.subscriber_id) AS monthly_active_subscribers
+      FROM curated.fact_usage_event u
+      JOIN curated.dim_subscriber s
+          ON u.subscriber_id = s.subscriber_id
+      GROUP BY
+          s.partner_mno,
+          s.region,
+          usage_month
+      ORDER BY
+          usage_month,
+          s.partner_mno,
+          s.region;
+
+2. Total data volume GB per MNO per month with month-over-month trend
+  
+        WITH monthly_usage AS (
+            SELECT
+                s.partner_mno,
+                FORMAT_TIMESTAMP('%Y-%m', u.event_ts) AS usage_month,
+                SUM(u.bytes_up/bytes_down) AS total_bytes,
+                
+            FROM curated.fact_usage_event u
+            JOIN curated.dim_subscriber s
+                ON u.subscriber_id = s.subscriber_id
+            GROUP BY
+                s.partner_mno,
+                usage_month
+        ),
+        
+        monthly_usage_gb AS (
+            SELECT
+                partner_mno,
+                usage_month,
+                ROUND(total_bytes / POW(1024, 3), 2) AS total_gb
+            FROM monthly_usage
+        ),
+        
+        mom_trend AS (
+            SELECT
+                partner_mno,
+                usage_month,
+                total_gb,
+                LAG(total_gb) OVER (
+                    PARTITION BY partner_mno
+                    ORDER BY usage_month
+                ) AS previous_month_total_gb
+            FROM monthly_usage_gb
+        )
+        
+        SELECT
+            partner_mno,
+            usage_month,
+            total_gb,
+            previous_month_total_gb,
+            ROUND(total_gb - previous_month_total_gb, 2) AS mom_gb_change,
+            ROUND(
+                SAFE_DIVIDE(
+                    total_gb - previous_month_total_gb,
+                    previous_month_total_gb
+                ) * 100,
+                2
+            ) AS mom_percentage_change
+        FROM mom_trend
+        ORDER BY
+            usage_month,
+            partner_mno;
