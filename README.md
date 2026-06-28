@@ -145,19 +145,19 @@ Create business-ready tables.
     mart_partner_monthly_usage
 
 
-CREATE OR REPLACE TABLE mart.mart_partner_monthly_usage AS
-    SELECT
-        s.partner_mno,
-        FORMAT_TIMESTAMP('%Y-%m', u.event_ts) AS usage_month,
-        COUNT(*) AS total_events,
-        COUNT(DISTINCT u.subscriber_id) AS active_subscribers,
-        SUM(u.bytes_up) AS total_bytes_up_down
-    FROM curated.fact_usage_event u
-    JOIN curated.dim_subscriber s
-    ON u.subscriber_id = s.subscriber_id
-    GROUP BY
-        s.partner_mno,
-        usage_month;
+    CREATE OR REPLACE TABLE mart.mart_partner_monthly_usage AS
+        SELECT
+            s.partner_mno,
+            FORMAT_TIMESTAMP('%Y-%m', u.event_ts) AS usage_month,
+            COUNT(*) AS total_events,
+            COUNT(DISTINCT u.subscriber_id) AS active_subscribers,
+            SUM(u.bytes_up) AS total_bytes_up_down
+        FROM curated.fact_usage_event u
+        JOIN curated.dim_subscriber s
+        ON u.subscriber_id = s.subscriber_id
+        GROUP BY
+            s.partner_mno,
+            usage_month;
 
 Data Quality Checks:
 ---------------------------
@@ -168,7 +168,26 @@ subscribers.csv checks
         status should be active / suspended / cancelled
         region should be NA / EU / APAC / LATAM
         plan_type should be IoT / Direct-to-Device / Automotive
-        
+
+        query:
+        Check duplicate subscribers
+            SELECT subscriber_id, COUNT(*) AS cnt
+            FROM curated.dim_subscriber
+            GROUP BY subscriber_id
+            HAVING COUNT(*) > 1;
+
+        Check usage events without valid subscriber
+            SELECT u.*
+            FROM curated.fact_usage_event u
+            LEFT JOIN curated.dim_subscriber s
+            ON u.subscriber_id = s.subscriber_id
+            WHERE s.subscriber_id IS NULL;
+            
+        Check invalid subscriber status
+            SELECT *
+            FROM curated.dim_subscriber
+            WHERE status NOT IN ('active', 'suspended', 'cancelled');
+            
 usage_events.csv checks
         event_id should not be null
         event_id should be unique
