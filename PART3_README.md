@@ -75,3 +75,65 @@ If load fails → check source file
 If DQ fails → check rejected records
 If Data mart fails → check BigQuery SQL/logs
 If SLA fails → notify billing teams
+
+Dag.py file: 
+---------------------
+-Each task must call the same function which is defined in the pipeline.py file.
+    
+    from datetime import datetime, timedelta
+    from airflow import DAG
+    from airflow.operators.python import PythonOperator
+    from airflow.utils.trigger_rule import TriggerRule
+    
+    
+    default_args = {
+        "owner": "data-engineering",
+        "retries": 2,
+        "retry_delay": timedelta(minutes=5)
+    }
+    
+    
+    with DAG(
+        dag_id="billing_pipeline",
+        default_args=default_args,
+        start_date=datetime(2026, 06, 29),
+        schedule="@daily",
+        catchup=False
+    ) as dag:
+    
+    
+        load_subscribers = PythonOperator(
+            task_id="load_subscribers",
+            python_callable=load_subscriber
+    
+        )
+    
+        load_usage_events = PythonOpearator(
+            task_id="load_usage_events",
+            python_callable=load_usages_events
+        )
+    
+        load_billing = PythonOpearator(
+            task_id="load_billing",
+            python_callable=load_billing
+        )
+    
+        run_dq_checks = PythonOpearator(
+            task_id="run_dq_checks",
+            python_callable=dq_check
+        )
+    
+        build_marts = PythonOpearator(
+            task_id="build_marts",
+            python_callable=build_mart
+        )
+    
+        notify = PythonOpearator(
+            task_id="send_notification",
+            python_callable=send_notification,
+            trigger_rule=TriggerRule.ALL_DONE
+        )
+    
+      
+        [load_subscribers, load_usage_events, load_billing] >> run_dq_checks
+        >> build_marts >> notify
