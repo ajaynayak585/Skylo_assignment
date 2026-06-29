@@ -99,7 +99,7 @@ Curated layer contains clean business entities.
             ORDER BY ingestion_ts DESC
         ) = 1;
 
-    CREATE OR REPLACE TABLE curated.fact_usage_event
+    CREATE OR REPLACE TABLE curated.dim_usage_event
         PARTITION BY DATE(event_ts)
         CLUSTER BY subscriber_id, ntn_beam_id AS
         SELECT
@@ -107,7 +107,7 @@ Curated layer contains clean business entities.
             subscriber_id,
             SAFE_CAST(event_ts AS TIMESTAMP) AS event_ts,
             session_id,
-            SAFE_CAST(bytes_up AS INT64) AS bytes_up/bytes_down,
+            SAFE_CAST(bytes_up/bytes_down AS INT64) AS bytes_up/bytes_down,
             ntn_beam_id,
             SAFE_CAST(duration_s AS INT64) AS duration_s,
             CURRENT_TIMESTAMP() AS created_at
