@@ -1,5 +1,4 @@
-Operations & Reflection:
------------------------------
+
 1. Monitor pipeline health using Airflow:
 ----------------------------------------------
     A. DAG-level monitoring
