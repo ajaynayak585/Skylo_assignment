@@ -36,36 +36,36 @@ Raw layer stores data exactly as received.
      raw_usage_events
      raw_billing
 
-CREATE TABLE raw.raw_subscribers (
-    subscriber_id STRING,
-    partner_mno STRING,
-    plan_type STRING,
-    activation_date STRING,
-    region STRING,
-    status STRING,
-    ingestion_ts TIMESTAMP
-);
-
-CREATE TABLE raw.raw_usage_events (
-    event_id STRING,
-    subscriber_id STRING,
-    event_ts TIMESTAMP,
-    session_id STRING,
-    bytes_up/bytes_down INT64,
-    ntn_beam_id STRING,
-    duration_s INT64,
-    ingestion_ts TIMESTAMP
-);
-
-CREATE TABLE raw.raw_billing (
-    invoice_id STRING,
-    partner_mno STRING,
-    billing_month STRING,
-    amount_usd NUMERIC,
-    currency STRING,
-    status STRING,
-    ingestion_ts TIMESTAMP
-);
+        CREATE TABLE raw.raw_subscribers (
+            subscriber_id STRING,
+            partner_mno STRING,
+            plan_type STRING,
+            activation_date STRING,
+            region STRING,
+            status STRING,
+            ingestion_ts TIMESTAMP
+        );
+        
+        CREATE TABLE raw.raw_usage_events (
+            event_id STRING,
+            subscriber_id STRING,
+            event_ts TIMESTAMP,
+            session_id STRING,
+            bytes_up/bytes_down INT64,
+            ntn_beam_id STRING,
+            duration_s INT64,
+            ingestion_ts TIMESTAMP
+        );
+        
+        CREATE TABLE raw.raw_billing (
+            invoice_id STRING,
+            partner_mno STRING,
+            billing_month STRING,
+            amount_usd NUMERIC,
+            currency STRING,
+            status STRING,
+            ingestion_ts TIMESTAMP
+        );
 
 Staging layer performs light cleaning.
     stg_subscribers
