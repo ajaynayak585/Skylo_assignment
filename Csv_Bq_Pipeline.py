@@ -241,4 +241,4 @@ with DAG(
     )
 
     [load_subscribers, load_usage_events, load_billing_task] >> run_dq_checks
-    run_dq_checks >> build_curated >> build_marts >> notify
+    build_curated_tables >> build_marts >> notify
