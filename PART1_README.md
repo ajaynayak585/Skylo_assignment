@@ -11,22 +11,22 @@ billing.csv
 Architecture:
 ------------
 
-CSV Files
-    subscribers.csv
-    usage_events.csv
-    billing.csv
-   |
-Python Ingestion Pipeline into Bigquery
-   |
-Raw Layer
-   |
-Staging Layer
-   |
-Curated Layer
-   |
-Analytics Marts
-   |
-Data Quality Checks
+        CSV Files
+            subscribers.csv
+            usage_events.csv
+            billing.csv
+           |
+        Python Ingestion Pipeline into Bigquery
+               |
+            Raw Layer
+               |
+            Staging Layer
+               |
+            Curated Layer
+               |
+            Analytics Marts
+               |
+            Data Quality Checks
 
 Data Modeling on BQ:
 ------------------------
