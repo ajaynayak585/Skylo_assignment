@@ -15,29 +15,33 @@ The source systems can be divided into two categories:
 
 Architecture would look like this:
 ---------------------------------------
+ Batch processing: 
 
-CRM / Billing / NetSuite
-        |
-Batch ingestion using API / JDBC / SFTP / Data Transfer
-        |
-Cloud Storage Raw Zone
-        |
-Dataflow Batch / Dataproc PySpark / BigQuery SQL
-        |
-BigQuery Raw → Staging → Curated → Marts
+         1.CRM / Billing / NetSuite
+                 
+         2.Batch ingestion using API / JDBC / SFTP / Data Transfer
+         
+      
+         3.Cloud Storage Raw Zone
+         
+              
+         4.Dataflow Batch / Dataproc PySpark / BigQuery SQL
+         
+         5.BigQuery Raw → Staging → Curated → Marts
+   
+ Streaming processing: 
 
-
-Network / RAN / Core
-        |
-Pub/Sub Topic
-        |
-Dataflow Streaming Pipeline
-        |
-Validation 
-        |
-BigQuery Raw Streaming Tables
-        |
-Curated Operational Tables / Analytics Marts / ML Features
+         1.Network / RAN / Core
+              
+         2.Pub/Sub Topic
+                 
+         3.Dataflow Streaming Pipeline
+                 
+         4.Validation 
+                 
+         5.BigQuery Raw Streaming Tables
+                 
+         6.Curated Operational Tables / Analytics Marts / ML Features
 
 Data Modeling:
 ----------------
